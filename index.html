@@ -1,125 +1,128 @@
 <html>
-    <title>Schedule Follow-up</title> <script src="https://cdn.tailwindcss.com"></script> <style> body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; } .card { background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; padding: 2rem; text-align: center; transition: transform 0.3s ease; } .btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-top: 15px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-decoration: none; } .btn-primary { background-color: #4f46e5; color: white; border: none; } .btn-primary:hover { background-color: #4338ca; transform: translateY(-2px); } .btn-google { background-color: white; color: #444; border: 1px solid #ddd; } .btn-google:hover { background-color: #f8f9fa; } .date-display { background-color: #eef2ff; color: #4f46e5; padding: 10px; border-radius: 8px; font-weight: bold; margin: 10px 0; font-size: 1.1rem; } select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #d1d5db; margin-bottom: 10px; background-color: #f9fafb; font-size: 1rem; cursor: pointer; } </style>
-    <div class="card" id="main-card">
-        <div class="mb-4">
-            <i class="fa-solid fa-shoe-prints text-5xl text-indigo-600"></i>
-        </div>
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">Get New Shoes</h1>
-        <p class="text-gray-600 mb-4">Select a timeframe for your reminder.</p>
-    
-        <!-- Timeframe Selector -->
-        <div class="mb-2 text-left">
-            <label for="month-select" class="block text-sm font-medium text-gray-700 mb-1 ml-1">Remind me in:</label>
-            <select id="month-select" onchange="updateEvent()">
-                <option value="3">3 Months</option>
-                <option value="4">4 Months</option>
-                <option value="5">5 Months</option>
-                <option value="6" selected>6 Months</option>
-                <option value="7">7 Months</option>
-                <option value="8">8 Months</option>
-            </select>
-        </div>
-    
-        <!-- Calculated Date Display -->
-        <div id="target-date" class="date-display">Loading date...</div>
-    
-        <!-- Universal ICS Download (Apple, Outlook, Android) -->
-        <a id="download-ics" href="#" class="btn btn-primary">
-            <i class="fa-brands fa-apple mr-2"></i> Apple / Outlook / Mobile
-        </a>
-    
-        <!-- Google Calendar Direct Link -->
-        <a id="google-cal" href="#" target="_blank" class="btn btn-google">
-            <i class="fa-brands fa-google mr-2"></i> Google Calendar
-        </a>
-    </div>
-    
-    <script>
-        // --- CONFIGURATION: EDIT THIS SECTION ---
-        const EVENT_CONFIG = {
-            title: "Get New Shoes",
-            // You can use \n for new lines in the description
-            description: "Time to replace your running shoes.\n\nStore Phone: (555) 123-4567\nStore Hours: 9am - 9pm", 
-            location: "The Shoe Store",
-            durationMinutes: 60
-        };
-    
-        // --- LOGIC ---
+    <body>
+        <title>Schedule Follow-up</title> <script src="https://cdn.tailwindcss.com"></script> <style> body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; } .card { background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; padding: 2rem; text-align: center; transition: transform 0.3s ease; } .btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-top: 15px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-decoration: none; } .btn-primary { background-color: #4f46e5; color: white; border: none; } .btn-primary:hover { background-color: #4338ca; transform: translateY(-2px); } .btn-google { background-color: white; color: #444; border: 1px solid #ddd; } .btn-google:hover { background-color: #f8f9fa; } .date-display { background-color: #eef2ff; color: #4f46e5; padding: 10px; border-radius: 8px; font-weight: bold; margin: 10px 0; font-size: 1.1rem; } select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #d1d5db; margin-bottom: 10px; background-color: #f9fafb; font-size: 1rem; cursor: pointer; } </style>
+        <div class="card" id="main-card">
+            <div class="mb-4">
+                <i class="fa-solid fa-shoe-prints text-5xl text-indigo-600"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Get New Shoes</h1>
+            <p class="text-gray-600 mb-4">Select a timeframe for your reminder.</p>
         
-        function updateEvent() {
-            const monthsToAdd = parseInt(document.getElementById('month-select').value);
-            const now = new Date();
-            const targetDate = new Date(now);
+            <!-- Timeframe Selector -->
+            <div class="mb-2 text-left">
+                <label for="month-select" class="block text-sm font-medium text-gray-700 mb-1 ml-1">Remind me in:</label>
+                <select id="month-select" onchange="updateEvent()">
+                    <option value="3">3 Months</option>
+                    <option value="4">4 Months</option>
+                    <option value="5">5 Months</option>
+                    <option value="6" selected>6 Months</option>
+                    <option value="7">7 Months</option>
+                    <option value="8">8 Months</option>
+                </select>
+            </div>
+        
+            <!-- Calculated Date Display -->
+            <div id="target-date" class="date-display">Loading date...</div>
+        
+            <!-- Universal ICS Download (Apple, Outlook, Android) -->
+            <a id="download-ics" href="#" class="btn btn-primary">
+                <i class="fa-brands fa-apple mr-2"></i> Apple / Outlook / Mobile
+            </a>
+        
+            <!-- Google Calendar Direct Link -->
+            <a id="google-cal" href="#" target="_blank" class="btn btn-google">
+                <i class="fa-brands fa-google mr-2"></i> Google Calendar
+            </a>
+        </div>
+        
+        <script>
+            // --- CONFIGURATION: EDIT THIS SECTION ---
+            const EVENT_CONFIG = {
+                title: "Get New Shoes",
+                // You can use \n for new lines in the description
+                description: "Time to replace your running shoes.\n\nStore Phone: (555) 123-4567\nStore Hours: 9am - 9pm", 
+                location: "The Shoe Store",
+                durationMinutes: 60
+            };
+        
+            // --- LOGIC ---
             
-            // Add the months dynamically based on selection
-            targetDate.setMonth(now.getMonth() + monthsToAdd);
-    
-            // Create End Time (start time + duration)
-            const endDate = new Date(targetDate);
-            endDate.setMinutes(targetDate.getMinutes() + EVENT_CONFIG.durationMinutes);
-    
-            // Update UI Text
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('target-date').textContent = targetDate.toLocaleDateString(undefined, options);
-    
-            // Generate Links
-            setupICS(targetDate, endDate, monthsToAdd);
-            setupGoogleCalendar(targetDate, endDate, monthsToAdd);
-        }
-    
-        // Helper to format date for ICS (YYYYMMDDTHHmmSSZ)
-        function formatDateICS(date) {
-            return date.toISOString().replace(/-|:|\.\d+/g, "");
-        }
-    
-        // 1. Setup Universal .ics File Download
-        function setupICS(start, end, months) {
-            // Customize title with specific month count
-            const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
-    
-            const icsContent = [
-                'BEGIN:VCALENDAR',
-                'VERSION:2.0',
-                'PRODID:-//Dynamic QR//EN',
-                'BEGIN:VEVENT',
-                `UID:${Date.now()}@dynamicqr`,
-                `DTSTAMP:${formatDateICS(new Date())}`,
-                `DTSTART:${formatDateICS(start)}`,
-                `DTEND:${formatDateICS(end)}`,
-                `SUMMARY:${dynamicTitle}`,
-                `DESCRIPTION:${EVENT_CONFIG.description}`,
-                `LOCATION:${EVENT_CONFIG.location}`,
-                'END:VEVENT',
-                'END:VCALENDAR'
-            ].join('\r\n');
-    
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            
-            const btn = document.getElementById('download-ics');
-            btn.href = url;
-            btn.download = `reminder-${months}-months.ics`;
-        }
-    
-        // 2. Setup Google Calendar Link
-        function setupGoogleCalendar(start, end, months) {
-            const startStr = formatDateICS(start);
-            const endStr = formatDateICS(end);
-            const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
-    
-            const googleUrl = new URL('https://calendar.google.com/calendar/render');
-            googleUrl.searchParams.append('action', 'TEMPLATE');
-            googleUrl.searchParams.append('text', dynamicTitle);
-            googleUrl.searchParams.append('details', EVENT_CONFIG.description);
-            googleUrl.searchParams.append('location', EVENT_CONFIG.location);
-            googleUrl.searchParams.append('dates', `${startStr}/${endStr}`);
-    
-            document.getElementById('google-cal').href = googleUrl.toString();
-        }
-    
-        // Run on load
-        updateEvent();
-    
-    
-    </script>
+            function updateEvent() {
+                const monthsToAdd = parseInt(document.getElementById('month-select').value);
+                const now = new Date();
+                const targetDate = new Date(now);
+                
+                // Add the months dynamically based on selection
+                targetDate.setMonth(now.getMonth() + monthsToAdd);
+        
+                // Create End Time (start time + duration)
+                const endDate = new Date(targetDate);
+                endDate.setMinutes(targetDate.getMinutes() + EVENT_CONFIG.durationMinutes);
+        
+                // Update UI Text
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('target-date').textContent = targetDate.toLocaleDateString(undefined, options);
+        
+                // Generate Links
+                setupICS(targetDate, endDate, monthsToAdd);
+                setupGoogleCalendar(targetDate, endDate, monthsToAdd);
+            }
+        
+            // Helper to format date for ICS (YYYYMMDDTHHmmSSZ)
+            function formatDateICS(date) {
+                return date.toISOString().replace(/-|:|\.\d+/g, "");
+            }
+        
+            // 1. Setup Universal .ics File Download
+            function setupICS(start, end, months) {
+                // Customize title with specific month count
+                const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
+        
+                const icsContent = [
+                    'BEGIN:VCALENDAR',
+                    'VERSION:2.0',
+                    'PRODID:-//Dynamic QR//EN',
+                    'BEGIN:VEVENT',
+                    `UID:${Date.now()}@dynamicqr`,
+                    `DTSTAMP:${formatDateICS(new Date())}`,
+                    `DTSTART:${formatDateICS(start)}`,
+                    `DTEND:${formatDateICS(end)}`,
+                    `SUMMARY:${dynamicTitle}`,
+                    `DESCRIPTION:${EVENT_CONFIG.description}`,
+                    `LOCATION:${EVENT_CONFIG.location}`,
+                    'END:VEVENT',
+                    'END:VCALENDAR'
+                ].join('\r\n');
+        
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                
+                const btn = document.getElementById('download-ics');
+                btn.href = url;
+                btn.download = `reminder-${months}-months.ics`;
+            }
+        
+            // 2. Setup Google Calendar Link
+            function setupGoogleCalendar(start, end, months) {
+                const startStr = formatDateICS(start);
+                const endStr = formatDateICS(end);
+                const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
+        
+                const googleUrl = new URL('https://calendar.google.com/calendar/render');
+                googleUrl.searchParams.append('action', 'TEMPLATE');
+                googleUrl.searchParams.append('text', dynamicTitle);
+                googleUrl.searchParams.append('details', EVENT_CONFIG.description);
+                googleUrl.searchParams.append('location', EVENT_CONFIG.location);
+                googleUrl.searchParams.append('dates', `${startStr}/${endStr}`);
+        
+                document.getElementById('google-cal').href = googleUrl.toString();
+            }
+        
+            // Run on load
+            updateEvent();
+        
+        
+        </script>
+    </body>
 </html>
+
