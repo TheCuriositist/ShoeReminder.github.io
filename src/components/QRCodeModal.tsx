@@ -17,15 +17,15 @@ interface QRCodeModalProps {
 export function QRCodeModal({ isOpen, onClose, value, title = "Scan to Add to Calendar" }: QRCodeModalProps) {
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md border-4 shadow-2xl">
                 <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>
+                    <DialogTitle className="text-center">{title}</DialogTitle>
+                    <DialogDescription className="text-center">
                         Scan this QR code with your mobile camera to add the event to your calendar.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center justify-center p-6">
-                    <div className="bg-white p-4 rounded-xl shadow-inner border border-border">
+                    <div className="bg-white p-4 rounded-xl border-4">
                         <QRCodeSVG
                             value={value}
                             size={256}
