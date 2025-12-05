@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { QRCodeModal } from './QRCodeModal';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -80,61 +81,92 @@ export function ShoeReminder() {
         return googleUrl.toString();
     };
 
+    const [showQR, setShowQR] = useState(false);
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+                event.preventDefault();
+                setShowQR(prev => !prev);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    const getICSData = () => {
+        const months = parseInt(monthsToAdd);
+        const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
+        const startStr = formatDateAllDay(targetDate);
+        const endStr = formatDateAllDay(endDate);
+        return buildICSContent(startStr, endStr, dynamicTitle, EVENT_CONFIG.description, EVENT_CONFIG.location);
+    }
+
     return (
-        <Card className="w-[90%] max-w-[400px] shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
-            <CardHeader className="text-center pb-2">
-                <div className="flex justify-center mb-4">
-                    <Footprints className="h-12 w-12 text-indigo-600" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-gray-800">Get New Shoes</CardTitle>
-                <CardDescription className="text-gray-600">
-                    Select a timeframe for your reminder.
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <div className="space-y-2">
-                    <label htmlFor="month-select" className="text-sm font-medium text-gray-700 ml-1">
-                        Remind me in:
-                    </label>
-                    <Select value={monthsToAdd} onValueChange={setMonthsToAdd}>
-                        <SelectTrigger id="month-select" className="w-full bg-gray-50 border-gray-200">
-                            <SelectValue placeholder="Select months" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {[3, 4, 5, 6, 7, 8].map((month) => (
-                                <SelectItem key={month} value={month.toString()}>
-                                    {month} Months
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
+        <>
+            <Card className="w-[90%] max-w-[400px] shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
+                <CardHeader className="text-center pb-2">
+                    <div className="flex justify-center mb-4">
+                        <Footprints className="h-12 w-12 text-indigo-600" />
+                    </div>
+                    <CardTitle className="text-2xl font-bold text-gray-800">Get New Shoes</CardTitle>
+                    <CardDescription className="text-gray-600">
+                        Select a timeframe for your reminder.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                        <label htmlFor="month-select" className="text-sm font-medium text-gray-700 ml-1">
+                            Remind me in:
+                        </label>
+                        <Select value={monthsToAdd} onValueChange={setMonthsToAdd}>
+                            <SelectTrigger id="month-select" className="w-full bg-gray-50 border-gray-200">
+                                <SelectValue placeholder="Select months" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {[3, 4, 5, 6, 7, 8].map((month) => (
+                                    <SelectItem key={month} value={month.toString()}>
+                                        {month} Months
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
 
-                <div className="bg-indigo-50 text-indigo-700 p-3 rounded-lg text-center font-bold text-lg">
-                    {targetDate.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                </div>
+                    <div className="bg-indigo-50 text-indigo-700 p-3 rounded-lg text-center font-bold text-lg">
+                        {targetDate.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
 
-                <div className="space-y-3">
-                    <Button
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-6"
-                        onClick={handleDownloadICS}
-                    >
-                        <Smartphone className="mr-2 h-5 w-5" />
-                        Apple / Outlook / Mobile
-                    </Button>
+                    <div className="space-y-3">
+                        <Button
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-6"
+                            onClick={handleDownloadICS}
+                        >
+                            <Smartphone className="mr-2 h-5 w-5" />
+                            Apple / Outlook / Mobile
+                        </Button>
 
-                    <Button
-                        variant="outline"
-                        className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 py-6"
-                        asChild
-                    >
-                        <a href={getGoogleCalendarUrl()} target="_blank" rel="noopener noreferrer">
-                            <Calendar className="mr-2 h-5 w-5" />
-                            Google Calendar
-                        </a>
-                    </Button>
-                </div>
-            </CardContent>
-        </Card>
+                        <Button
+                            variant="outline"
+                            className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 py-6"
+                            asChild
+                        >
+                            <a href={getGoogleCalendarUrl()} target="_blank" rel="noopener noreferrer">
+                                <Calendar className="mr-2 h-5 w-5" />
+                                Google Calendar
+                            </a>
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <QRCodeModal
+                isOpen={showQR}
+                onClose={() => setShowQR(false)}
+                value={getICSData()}
+                title="Scan for Reminder"
+            />
+        </>
     );
 }
