@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ShoeReminder } from './components/ShoeReminder';
 import { GeneratePage } from './routes/GeneratePage';
 import { Footer } from './components/Footer';
+import { BrandSEO } from './components/BrandSEO';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       <Footer />
+      <BrandSEO />
     </div>
   );
 }
