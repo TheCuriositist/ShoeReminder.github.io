@@ -44,18 +44,18 @@ export function ShoeReminder() {
                         Select a timeframe for your reminder.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-6 text-center">
                     <div className="space-y-2">
                         <label htmlFor="month-select" className="text-sm font-medium text-foreground ml-1">
                             Remind me in:
                         </label>
                         <Select value={monthsToAdd} onValueChange={setMonthsToAdd}>
-                            <SelectTrigger id="month-select" className="w-full bg-muted/50 border-input">
+                            <SelectTrigger id="month-select" className="w-full border-2 border-input shadow-2xl">
                                 <SelectValue placeholder="Select months" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="shadow-2xl">
                                 {[3, 4, 5, 6, 7, 8, 10, 12].map((month) => (
-                                    <SelectItem key={month} value={month.toString()}>
+                                    <SelectItem key={month} value={month.toString()} className="focus:bg-primary focus:text-primary-foreground">
                                         {month} Months
                                     </SelectItem>
                                 ))}
