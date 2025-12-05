@@ -6,7 +6,7 @@ import { BrandSEO } from './components/BrandSEO';
 
 function App() {
   return (
-    <div className="min-h-dvh w-full overflow-x-hidden bg-gradient-to-br from-background to-muted/50 flex items-center justify-center p-4">
+    <div className="min-h-dvh w-full overflow-x-hidden bg-gradient-to-br from-background to-muted/50 flex flex-col items-center justify-center p-4">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ShoeReminder />} />
