@@ -1,39 +1,17 @@
 import { useState, useEffect } from 'react';
-import { QRCodeModal } from './QRCodeModal';
+import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Footprints, Calendar, Smartphone } from 'lucide-react';
+import { QRCodeModal } from '@/components/QRCodeModal';
 import { EVENT_CONFIG, buildICSContent, formatDateAllDay, getTargetDates, generateGoogleCalendarUrl } from '@/lib/calendar';
 
-export function ShoeReminder() {
-    const [monthsToAdd, setMonthsToAdd] = useState<string>("6");
-
-    const months = parseInt(monthsToAdd);
+export function GeneratePage() {
+    const [searchParams] = useSearchParams();
+    const durationMonths = parseInt(searchParams.get('duration-months') || "6");
+    const months = isNaN(durationMonths) ? 6 : durationMonths;
     const { targetDate, endDate } = getTargetDates(months);
-
-    const handleDownloadICS = () => {
-        const months = parseInt(monthsToAdd);
-        const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
-        const startStr = formatDateAllDay(targetDate);
-        const endStr = formatDateAllDay(endDate);
-        const icsContent = buildICSContent(startStr, endStr, dynamicTitle, EVENT_CONFIG.description, EVENT_CONFIG.location);
-
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `reminder-${months}-months.ics`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const getGoogleCalendarUrl = () => {
-        const months = parseInt(monthsToAdd);
-        const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
-        return generateGoogleCalendarUrl(targetDate, endDate, dynamicTitle);
-    };
+    const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
 
     const [showQR, setShowQR] = useState(false);
 
@@ -49,13 +27,26 @@ export function ShoeReminder() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
+    const handleDownloadICS = () => {
+        const icsContent = getICSData();
+
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `reminder-${months}-months.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const getICSData = () => {
-        const months = parseInt(monthsToAdd);
-        const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
         const startStr = formatDateAllDay(targetDate);
         const endStr = formatDateAllDay(endDate);
         return buildICSContent(startStr, endStr, dynamicTitle, EVENT_CONFIG.description, EVENT_CONFIG.location);
-    }
+    };
+
+    const googleUrl = generateGoogleCalendarUrl(targetDate, endDate, dynamicTitle);
 
     return (
         <>
@@ -64,30 +55,12 @@ export function ShoeReminder() {
                     <div className="flex justify-center mb-4">
                         <Footprints className="h-12 w-12 text-indigo-600" />
                     </div>
-                    <CardTitle className="text-2xl font-bold text-gray-800">Get New Shoes</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-gray-800">Reminder Ready</CardTitle>
                     <CardDescription className="text-gray-600">
-                        Select a timeframe for your reminder.
+                        Here is your {months} month reminder link.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    <div className="space-y-2">
-                        <label htmlFor="month-select" className="text-sm font-medium text-gray-700 ml-1">
-                            Remind me in:
-                        </label>
-                        <Select value={monthsToAdd} onValueChange={setMonthsToAdd}>
-                            <SelectTrigger id="month-select" className="w-full bg-gray-50 border-gray-200">
-                                <SelectValue placeholder="Select months" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {[3, 4, 5, 6, 7, 8].map((month) => (
-                                    <SelectItem key={month} value={month.toString()}>
-                                        {month} Months
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
                     <div className="bg-indigo-50 text-indigo-700 p-3 rounded-lg text-center font-bold text-lg">
                         {targetDate.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                     </div>
@@ -106,9 +79,9 @@ export function ShoeReminder() {
                             className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 py-6"
                             asChild
                         >
-                            <a href={getGoogleCalendarUrl()} target="_blank" rel="noopener noreferrer">
+                            <a href={googleUrl} target="_blank" rel="noopener noreferrer">
                                 <Calendar className="mr-2 h-5 w-5" />
-                                Google Calendar
+                                Add to Google Calendar
                             </a>
                         </Button>
                     </div>
