@@ -8,7 +8,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ShoeReminder />} />
-          <Route path="/api/v1/generate" element={<GeneratePage />} />
+          <Route path="/api/v1/reminders" element={<GeneratePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

@@ -2,14 +2,25 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Footprints, Calendar, Smartphone } from 'lucide-react';
+import { Footprints, Calendar, Smartphone, AlertCircle } from 'lucide-react';
 import { QRCodeModal } from '@/components/QRCodeModal';
 import { EVENT_CONFIG, buildICSContent, formatDateAllDay, getTargetDates, generateGoogleCalendarUrl } from '@/lib/calendar';
+import { z } from 'zod';
+
+const MIN_MONTHS = 1;
+const MAX_MONTHS = 24;
+const DEFAULT_MONTHS = 6;
+
+const monthsSchema = z.coerce.number().int().min(MIN_MONTHS).max(MAX_MONTHS);
 
 export function GeneratePage() {
     const [searchParams] = useSearchParams();
-    const durationMonths = parseInt(searchParams.get('duration-months') || "6");
-    const months = isNaN(durationMonths) ? 6 : durationMonths;
+    const monthsParam = searchParams.get('months') || searchParams.get('duration');
+
+    const result = monthsSchema.safeParse(monthsParam);
+    const months = result.success ? result.data : DEFAULT_MONTHS;
+    const hasError = !result.success && monthsParam !== null;
+
     const { targetDate, endDate } = getTargetDates(months);
     const dynamicTitle = `${months} Month ${EVENT_CONFIG.title}`;
 
@@ -26,6 +37,13 @@ export function GeneratePage() {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
+
+    useEffect(() => {
+        const format = searchParams.get('format');
+        if (format === 'ics') {
+            handleDownloadICS();
+        }
+    }, [searchParams]);
 
     const handleDownloadICS = () => {
         const icsContent = getICSData();
@@ -47,6 +65,30 @@ export function GeneratePage() {
     };
 
     const googleUrl = generateGoogleCalendarUrl(targetDate, endDate, dynamicTitle);
+
+    if (hasError) {
+        return (
+            <Card className="w-[90%] max-w-[400px] shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
+                <CardHeader className="text-center pb-2">
+                    <div className="flex justify-center mb-4">
+                        <AlertCircle className="h-12 w-12 text-red-600" />
+                    </div>
+                    <CardTitle className="text-2xl font-bold text-gray-800">Invalid Request</CardTitle>
+                    <CardDescription className="text-gray-600">
+                        Months must be between {MIN_MONTHS} and {MAX_MONTHS}.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <Button
+                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                        onClick={() => window.location.href = '/api/v1/reminders?months=6'}
+                    >
+                        Use Default (6 months)
+                    </Button>
+                </CardContent>
+            </Card>
+        );
+    }
 
     return (
         <>
