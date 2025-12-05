@@ -11,7 +11,7 @@ export function ReminderActions({ onDownload, googleUrl }: ReminderActionsProps)
         <div className="space-y-3">
             <Button
                 variant="default"
-                className="inline-flex items-center justify-center gap-2 whitespace-normal text-center rounded-md text-sm transition-colors focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-primary text-primary-foreground shadow-2xl hover:bg-primary hover:brightness-90 font-semibold w-full py-6 h-auto"
+                className="inline-flex items-center justify-center gap-2 whitespace-normal text-center rounded-md text-sm transition-colors focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-primary text-primary-foreground shadow-2xl hover:bg-primary hover:bg-primary/90 font-semibold w-full py-6 h-auto"
                 onClick={onDownload}
             >
                 <Smartphone className="mr-2 h-5 w-5" />
