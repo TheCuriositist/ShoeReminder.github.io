@@ -6,9 +6,7 @@ export const EVENT_CONFIG = {
     location: EVENT_LOCATION,
 };
 
-export function getReminderTitle(months: number) {
-    return `${months} Month ${EVENT_CONFIG.title}`;
-}
+
 
 export function buildICSContent(startStr: string, endStr: string, title: string, description: string, location: string) {
     const uid = `${Date.now()}@shoereminder`;

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Footprints, AlertCircle } from 'lucide-react';
 import { QRCodeModal } from '@/components/QRCodeModal';
-import { EVENT_CONFIG, buildICSContent, formatDateAllDay, getTargetDates, generateGoogleCalendarUrl, getReminderTitle } from '@/lib/calendar';
+import { EVENT_CONFIG, buildICSContent, formatDateAllDay, getTargetDates, generateGoogleCalendarUrl } from '@/lib/calendar';
 import { downloadFile } from '@/lib/utils';
 import { useKeyDown } from '@/hooks/useKeyDown';
 import { ReminderActions } from '@/components/ReminderActions';
@@ -25,14 +25,14 @@ export function GeneratePage() {
     const hasError = !result.success && monthsParam !== null;
 
     const { targetDate, endDate } = getTargetDates(months);
-    const dynamicTitle = getReminderTitle(months);
+    const eventTitle = EVENT_CONFIG.title;
 
     const [showQR, setShowQR] = useState(false);
 
     const getICSData = () => {
         const startStr = formatDateAllDay(targetDate);
         const endStr = formatDateAllDay(endDate);
-        return buildICSContent(startStr, endStr, dynamicTitle, EVENT_CONFIG.description, EVENT_CONFIG.location);
+        return buildICSContent(startStr, endStr, eventTitle, EVENT_CONFIG.description, EVENT_CONFIG.location);
     };
 
     const handleDownloadICS = () => {
@@ -51,7 +51,7 @@ export function GeneratePage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams]);
 
-    const googleUrl = generateGoogleCalendarUrl(targetDate, endDate, dynamicTitle);
+    const googleUrl = generateGoogleCalendarUrl(targetDate, endDate, eventTitle);
 
     if (hasError) {
         return (

@@ -3,7 +3,7 @@ import { QRCodeModal } from './QRCodeModal';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Footprints } from 'lucide-react';
-import { EVENT_CONFIG, buildICSContent, formatDateAllDay, getTargetDates, generateGoogleCalendarUrl, getReminderTitle } from '@/lib/calendar';
+import { EVENT_CONFIG, buildICSContent, formatDateAllDay, getTargetDates, generateGoogleCalendarUrl } from '@/lib/calendar';
 import { downloadFile } from '@/lib/utils';
 import { useKeyDown } from '@/hooks/useKeyDown';
 import { ReminderActions } from './ReminderActions';
@@ -14,12 +14,12 @@ export function ShoeReminder() {
 
     const months = parseInt(monthsToAdd);
     const { targetDate, endDate } = getTargetDates(months);
-    const dynamicTitle = getReminderTitle(months);
+    const eventTitle = EVENT_CONFIG.title;
 
     const getICSData = () => {
         const startStr = formatDateAllDay(targetDate);
         const endStr = formatDateAllDay(endDate);
-        return buildICSContent(startStr, endStr, dynamicTitle, EVENT_CONFIG.description, EVENT_CONFIG.location);
+        return buildICSContent(startStr, endStr, eventTitle, EVENT_CONFIG.description, EVENT_CONFIG.location);
     };
 
     const handleDownloadICS = () => {
@@ -27,7 +27,7 @@ export function ShoeReminder() {
         downloadFile(icsContent, `reminder-${months}-months.ics`, 'text/calendar;charset=utf-8');
     };
 
-    const googleUrl = generateGoogleCalendarUrl(targetDate, endDate, dynamicTitle);
+    const googleUrl = generateGoogleCalendarUrl(targetDate, endDate, eventTitle);
 
     useKeyDown('k', () => setShowQR(prev => !prev), { metaOrCtrl: true, preventDefault: true });
 
