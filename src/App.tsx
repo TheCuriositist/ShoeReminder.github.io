@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ShoeReminder } from './components/ShoeReminder';
 import { GeneratePage } from './routes/GeneratePage';
+import { Footer } from './components/Footer';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </div>
   );
 }
