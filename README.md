@@ -1,41 +1,47 @@
 # Shoe Reminder
 
-A modern web application to help you schedule reminders for replacing your running shoes. Built with React, Vite, Tailwind CSS, and ShadCN UI.
+A modern web application to help you schedule reminders for replacing your running shoes.
 
 ## Features
 
-- **Customizable Timeframe**: Select from 3 to 8 months for your reminder.
-- **Smart Date Calculation**: Automatically calculates the target date based on your selection.
-- **Universal Calendar Support**:
-    - **Download ICS**: Works with Apple Calendar, Outlook, and mobile devices.
-    - **Google Calendar**: Direct link to create an event.
-- **Responsive Design**: Looks great on desktop and mobile.
+- **Flexible Duration**: Generate reminders from 1 to 24 months
+- **Universal Calendar Support**: Download ICS files or add directly to Google Calendar
+- **API Endpoint**: Access reminders via `/api/v1/reminders?months=6`
+- **QR Code Sharing**: Press `Cmd/Ctrl + K` to generate a QR code
+- **Responsive Design**: Works on desktop and mobile
 
 ## Tech Stack
 
-- **Framework**: React + Vite
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **UI Components**: ShadCN UI
-- **Icons**: Lucide React
-- **Package Manager**: Bun
+- React 19 + Vite (Rolldown)
+- TypeScript
+- Tailwind CSS v4
+- ShadCN UI
+- Zod validation
+- Bun
 
 ## Getting Started
 
-1.  **Install dependencies**:
-    ```bash
-    bun install
-    ```
+```bash
+# Install dependencies
+bun install
 
-2.  **Start the development server**:
-    ```bash
-    bun dev
-    ```
+# Start development server
+bun dev
 
-3.  **Build for production**:
-    ```bash
-    bun run build
-    ```
+# Build for production
+bun run build
+```
+
+## API Usage
+
+```
+GET /api/v1/reminders?months=6
+GET /api/v1/reminders?months=6&format=ics  # Auto-download
+```
+
+Parameters:
+- `months` or `duration`: Number of months (1-24)
+- `format`: Optional. Set to `ics` for auto-download
 
 ## License
 
